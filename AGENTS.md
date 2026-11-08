@@ -7,8 +7,8 @@ jig is an SDLC harness for coding agents. An SDLC (software development life cyc
 ## What to read first
 
 1. `VOCABULARY.md` lists the terms used in this repo. Use them as defined there.
-2. `docs/<project>.spec.md` says what the project is for. The `ruleset:` field in its frontmatter names the rules the project follows.
-3. `rulesets/<ruleset>/README.md` describes those rules.
+2. `docs/<project>.spec.md` says what the project is for. The `ruleset:` field in its frontmatter names the rules the project follows. A project with no ruleset names its own standards record there.
+3. `rulesets/<ruleset>/README.md` describes those rules. If the project has no ruleset, read its standards record instead.
 4. `harness/plans/CURRENT` holds the stub of the scope you are working on. Its plan is `harness/plans/<stub>.plan.md`. If `CURRENT` is missing, no plan is approved yet.
 
 ## How work moves
@@ -60,7 +60,7 @@ Always report the check's real output, not your summary of it.
 Two files hold the rules. Each rule is tied to a check you cannot change.
 
 - `harness/rules.md` holds the process rules. They govern how tasks, scopes and plans are written and closed, and apply to every project.
-- The project's ruleset holds the rules about the software you build.
+- The project's ruleset holds the rules about the software you build. A project with no ruleset keeps them in its own standards record.
 
 This file holds no rules of either kind beyond what is above.
 
