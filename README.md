@@ -107,4 +107,4 @@ GitHub cannot merge a template into a repo that already exists. So you copy the 
 
 ## License
 
-UNSPECIFIED. Decided at release approval.
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
