@@ -11,6 +11,8 @@ This folder holds the plans the agent works from, and the scripts that hold the 
 
 Approval is a physical move. The agent can write to `drafts/` but not to `plans/`, so an approved plan cannot be quietly edited. The agent's tool settings block edits to `plans/`.
 
+That block covers the Edit and Write tools only. A shell command can still write a file. The approval hash (`<stub>.approved.sha`, rule P-2) is the backstop: `mark-done.sh` refuses to run if anything but the status column changed. Until that script is built, this backstop is not enforced.
+
 ## File names
 
 Every file here is named `<stub>.<type>.<extension>`. The stub is the stub of the scope the plan delivers, so all files for one scope sort together.
