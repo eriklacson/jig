@@ -11,6 +11,8 @@ This folder holds the plans the agent works from, and the scripts that hold the 
 
 Approval is a physical move. The agent can write to `drafts/` but not to `plans/`, so an approved plan cannot be quietly edited. The agent's tool settings block edits to `plans/`.
 
+That block covers the Edit and Write tools only. A shell command can still write a file. The approval hash (`<stub>.approved.sha`, rule P-2) is the backstop: `mark-done.sh` refuses to run if anything but the status column changed. Until that script is built, this backstop is not enforced.
+
 ## File names
 
 Every file here is named `<stub>.<type>.<extension>`. The stub is the stub of the scope the plan delivers, so all files for one scope sort together.
@@ -59,5 +61,5 @@ The tests themselves live in the project's own `tests/` folder, because they are
 | `rules.md` | The process rules every project follows. Not yet tied to checks. |
 | `drafts/` | Empty |
 | `plans/template.plan.md` | In place |
-| `plans/00-restructure.*` and `plans/CURRENT` | The plan that set up this layout in the jig repo itself. Removed at its release approval, so new projects never inherit it. |
+| `plans/00-restructure.*` and `plans/CURRENT` | The jig repo only. The plan that set up this layout. Removed at its release approval. A project that copies jig in does not copy these. |
 | `loop/*.sh` | Not written yet. See `loop/README.md`. |
