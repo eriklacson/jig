@@ -24,11 +24,11 @@ These assume a multi-tenant SaaS: one database shared by many customer organisat
 
 ## Reporting rules
 
-Collected from the old template's `CLAUDE.md` and its spec checks. These keep CSFLite coverage reports honest.
+Collected from the old template's `CLAUDE.md` and its spec checks. These keep coverage reports honest.
 
 | ID | Rule | How it is checked | Where it came from | Install status |
 |---|---|---|---|---|
-| LS-1 | Every control ID cited exists in the CSFLite reference data. | A script checks every cited ID against `data/csf_lookup.csv` in the CSFLite repo. | Old CLAUDE.md; old spec check 1 | unbuilt |
+| LS-1 | Every control ID cited exists in the project's control reference file. | A script checks every cited ID against that file. | Old CLAUDE.md; old spec check 1 | unbuilt |
 | LS-2 | Score coverage only: does the control exist? Never score maturity. | A check fails on maturity terms in any report. | Old CLAUDE.md | unbuilt |
 | LS-3 | Never claim compliance or certification. | A check fails on certification claims in any report. | Old CLAUDE.md | unbuilt |
 | LS-4 | Prefer clear governance over adding more tools. | A person judges it at plan approval. | Old CLAUDE.md | unbuilt |

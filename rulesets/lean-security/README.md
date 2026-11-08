@@ -1,6 +1,6 @@
 # Ruleset: lean-security
 
-A ruleset for multi-tenant SaaS built by startups and small companies. It holds two kinds of rules: build rules that keep the software secure, and reporting rules that keep CSFLite coverage reports honest. It plugs into jig the same way as `neutral`. That proves a new ruleset can be added without changing the harness.
+A ruleset for multi-tenant SaaS built by startups and small companies. It holds two kinds of rules: build rules that keep the software secure, and reporting rules that keep coverage reports honest. It plugs into jig the same way as `neutral`. That proves a new ruleset can be added without changing the harness.
 
 ## What it assumes
 
@@ -20,11 +20,7 @@ These come from the project instructions and are locked.
 
 ## Reference data
 
-The CSFLite control set lives in the CSFLite repo, in a single file: `data/csf_lookup.csv` (CSFLite ADR-0004).
-
-https://github.com/eriklacson/CSFLite
-
-This ruleset keeps no copy of it.
+The control set is a single reference file that the project supplies, for example a CSV of control IDs. Rule LS-1 checks every cited control ID against it. This ruleset keeps no copy of it.
 
 ## Files
 

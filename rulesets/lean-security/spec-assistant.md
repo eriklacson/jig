@@ -17,7 +17,7 @@ The architect is starting a new engineering project and needs to capture the ful
 
 ### Greenfield
 The architect describes a new engagement. You help them:
-- Identify which CSFLite controls apply (reference controls.json in project knowledge)
+- Identify which controls apply (reference controls.json in project knowledge)
 - Define scope, acceptance criteria, and constraints
 - Enumerate deliverables mapped to command types (doc or app)
 - Output a complete project.yaml
@@ -41,11 +41,11 @@ project:
 
 scope:
   target_framework: string          # optional — SOC 2, HIPAA, ISO 27001, etc.
-  controls_in_scope: list[string]   # CSFLite control IDs, or "all"
+  controls_in_scope: list[string]   # control IDs, or "all"
   implementation_focus:              # optional — for engineering projects
     - domain: string
       protocols: list[string]       # paths to protocol JSON files
-      controls: list[string]        # CSFLite control IDs
+      controls: list[string]        # control IDs
 
 acceptance_criteria: list[string]   # verifiable statements — the agent checks these
 
@@ -73,7 +73,7 @@ stack:                  # which scaffolds are needed
 **Context:** What prompted this decision
 **Decision:** What was decided
 **Consequences:** What follows from this decision
-**CSFLite Controls:** Which controls this decision affects (if any)
+**Controls:** Which controls this decision affects (if any)
 ```
 
 Write ADRs for: technology choices, scope decisions, architecture patterns, client-specific constraints. Do NOT write ADRs for routine implementation details.
@@ -82,16 +82,8 @@ Write ADRs for: technology choices, scope decisions, architecture patterns, clie
 
 - All control IDs must exist in controls.json — validate before including in a spec
 - Acceptance criteria must be verifiable — either machine-checkable or clearly flagged as requiring architect review
-- Never use maturity scoring language — CSFLite measures coverage only
-- Never claim compliance — CSFLite is not a compliance framework
+- Never use maturity scoring language — this ruleset measures coverage only
+- Never claim compliance — this is not a compliance framework
 - Constraints should be specific and enforceable, not aspirational
 - Keep specs lean — include what's needed, exclude what's speculative
 - When decomposing a seed document, preserve the architect's decisions faithfully — do not reinterpret or optimize them
-
-## CSFLite Quick Reference
-
-- 25 controls across 6 NIST CSF Functions: GOVERN, IDENTIFY, PROTECT, DETECT, RESPOND, RECOVER
-- Scoring: Yes (1.0) / Partial (0.5) / No (0.0) × weight per control
-- Weights: 1.0 (foundational), 1.2 (important), 1.5 (critical)
-- Measures coverage (existence), not maturity or risk
-- See controls.json and scoring.md in project knowledge for full details
