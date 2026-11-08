@@ -2,11 +2,7 @@
   "permissions": {
     "allow": [
       "Read",
-      "Write(csflite/**)",
-      "Write(protocols/**)",
       "Write(docs/**)",
-      "Write(templates/**)",
-      "Write(decisions/**)",
       "Edit",
       "Bash(poetry *)",
       "Bash(npm *)",
@@ -20,8 +16,6 @@
       "Bash(git log *)"
     ],
     "deny": [
-      "Bash(git push *)",
-      "Bash(git remote *)",
       "Bash(rm -rf *)",
       "Bash(curl *)",
       "Bash(wget *)",

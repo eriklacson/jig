@@ -1,123 +1,110 @@
-# Lean Security — Claude Code Project Template
+# jig
 
-A reusable template for building Lean Security extension projects with Claude Code. Clone it, write a behavior spec, and the agent builds it: documents, CLI tools, or web applications, with CSFLite as the governing framework and Conduit as the evidence ingestion engine.
+A **software development life cycle (SDLC)** is the path software takes from idea to release: deciding what to build, planning it, building it, checking it and shipping it. A **harness** is everything around a coding agent that controls how it works: the instructions it reads, the files it works from, and the checks that judge its output.
 
-## What's Inside
+**jig is an SDLC harness for coding agents.** It takes an AI coding agent through every stage of the life cycle and controls each one. The agent writes the code. Checks the agent cannot change decide when each piece of work is done. A person approves the plan before work starts and approves the result before it ships. It works for new projects and for existing codebases.
 
-```
-CLAUDE.md                    → Claude Code system prompt (loaded every session)
-.claude/settings.json        → Permission guardrails
-csflite/controls.json        → 25 CSFLite controls (source of truth)
-csflite/scoring.md           → Scoring methodology reference
-claude-project/              → Kit for designing specs in Claude conversations
-pyproject.toml               → Poetry config + Black/Ruff/Bandit/pytest settings
-.pre-commit-config.yaml      → Pre-commit hooks (runs on every git commit)
-setup.sh                     → Post-clone local configuration
-```
+**jig is a boilerplate.** It is a GitHub template repository. You don't install it or call it from your code. You create a new repo from it, one per project, and fill in its templates.
 
-## Quick Start
+## Why jig exists
 
-### 1. Clone
+Coding agents write code quickly, but they are poor judges of their own work. Left alone, an agent decides for itself when a task is finished. It can report a task done when the tests never ran, change a test until it passes, or build something nobody asked for. The usual fix is to have a person review every change, which gives back most of the time the agent saved.
 
-```bash
-git clone git@github.com:<your-org>/lean-security-template.git my-project
-cd my-project
-./setup.sh
-```
+jig takes the decision away from the agent and keeps people only where judgment is needed:
 
-`setup.sh` does three things:
-- Configures `.git/info/exclude` so `.claude/` and local-only files are never pushed from project repos
-- Installs Python dev dependencies via Poetry
-- Installs pre-commit hooks (Black, Ruff, Bandit, pytest) so every commit is automatically validated
+- **A check decides when a task is done, not the agent.** The agent cannot edit the check or its result.
+- **Tests are locked before any code is written.** Their hash is taken while they still fail, so the agent cannot weaken them later.
+- **People approve twice.** Once when the plan is ready, once when the result is ready. Everything between those two points runs on checks.
+- **Every step leaves a file behind.** The spec, the scope, the plan and the log link each change back to the requirement that asked for it. That trail is also your evidence for an audit.
 
-### 2. Design the Spec
+## What a new project gets from the boilerplate
 
-Set up a Claude project for spec development:
+| Comes with the boilerplate | You add in each project |
+|---|---|
+| `AGENTS.md`, `CLAUDE.md`, `VOCABULARY.md` | Your code and its tests |
+| `harness/`: process rules, plan template, folder layout | Plans for your scopes, drafted by the agent |
+| `docs/`: templates for the spec, scopes, records and decisions | Your spec, records, scopes and decision records |
+| `rulesets/`: `neutral` and `lean-security` | Your choice of one ruleset, named in your spec |
+| `examples/python-poetry/` | The stack files you copy from it, if any |
 
-1. Create a new Claude project (e.g. "My Project — Spec")
-2. Paste `claude-project/system-instruction.md` as the project system prompt
-3. Upload as project knowledge:
-   - `claude-project/project-yaml-schema.md`
-   - `claude-project/examples/baseline-assessment.yaml`
-   - `csflite/controls.json`
-   - `csflite/scoring.md`
-4. Upload any seed documents (existing architecture docs, engagement notes)
+A new project starts with no plans. `harness/plans/` holds only `template.plan.md`.
 
-Then start a conversation. Two modes:
+## How work is cut up
 
-**Greenfield:** "I'm starting a HIPAA alignment engagement for a 40-person healthtech company. Help me write the project.yaml."
+| Piece | What it is | Where it lives |
+|---|---|---|
+| Spec | What the project is for: goal, outcomes, and the ruleset it follows. | `docs/<project>.spec.md` |
+| Records | Five documents describing the system, each as a build/audit pair. | `docs/build.<record>.md`, `docs/audit.<record>.md` |
+| Scope | A part of the spec built as one piece, with its own success criteria. | `docs/scopes/<stub>.scope.md` |
+| Plan | The tasks for one scope, in order, each with its check. | `harness/plans/<stub>.plan.md` |
+| Task | One step in the plan. The agent's loop works through them. | A row in the plan |
 
-**Decomposition:** "Here's our architecture document. Break it into a project.yaml, ADRs, and protocol definitions."
+## How jig is organised
 
-Output: a `project.yaml` and any supporting artifacts.
+jig has three levels. Each one has a different job.
 
-### 3. Drop Artifacts Into the Repo
+| Level | What it does | Where it lives |
+|---|---|---|
+| Harness | Runs the process and enforces the process rules: how tasks, scopes and plans are written and closed. | `AGENTS.md`, `harness/`, `harness/rules.md`, the templates in `docs/` |
+| Ruleset | Defines the rules about the software and how each rule is checked. | `rulesets/<name>/` |
+| Project | One codebase, using exactly one ruleset. | A repo created from jig |
 
-Copy the spec and supporting files from the Claude conversation into your project:
+Two rulesets ship with jig. `neutral` holds plain engineering rules and is the reference. `lean-security` is for multi-tenant SaaS: secure build rules plus coverage reporting rules. Both plug in the same way. No ruleset builds on another, because the process rules every project needs live in the harness.
+
+## What is in the repo
 
 ```
-my-project/
-├── project.yaml              ← from Claude conversation
-├── decisions/                 ← ADRs if any
-│   └── 0001-azure-hosting.md
-└── protocols/                 ← protocol definitions if any
-    └── edr-telemetry.json
+AGENTS.md            instructions for any AI agent
+CLAUDE.md            loads AGENTS.md into Claude Code
+VOCABULARY.md        the terms used in this repo
+docs/                the spec, the five records, the scopes and the decision records
+harness/             drafts, approved plans, and the scripts that hold the loop to the checks
+rulesets/            neutral, lean-security
+examples/            starter files for a stack (python-poetry)
+setup.sh             run once after cloning
 ```
 
-### 4. Execute in Claude Code
+## Two ways in
 
-Open the project in Claude Code. The agent reads `CLAUDE.md`, which points it to `project.yaml` and `csflite/`. Every task follows the execution loop:
+- **Existing codebase.** Describe the system as it is now (audit mode). Describe the change you want (build mode). Then plan, build and check.
+- **New project.** Describe what you want to build (build mode). Then plan, build and check.
 
-1. **READ** — project.yaml + controls.json + decisions/ + protocols/
-2. **PLAN** — agent proposes what to build, presents to you
-3. **APPROVE** — you review and adjust
-4. **IMPLEMENT** — agent builds it
-5. **VERIFY** — agent validates against CSFLite controls and acceptance criteria
-6. **REPORT** — agent presents output with verification results
+Both end the same way. When a scope is finished, fill the rows it covered in the audit records and compare them with the build records. Any row that differs is a gap between what was asked for and what got built.
 
-Or for simple projects, skip the Claude project step and initialize directly:
+Every file the process produces is named `<stub>.<type>.<extension>`, for example `01-login.scope.md` and `01-login.plan.md`. `VOCABULARY.md` lists the types.
 
-```
-/project:new-project <domain>
-```
+## Start a project
 
-## CSFLite
+1. On GitHub, choose **Use this template** on the jig repo to create your project repo. Clone it and run `./setup.sh`.
+2. Copy `docs/template.spec.md` to `docs/<project>.spec.md` and fill it in. Set `ruleset:` in its frontmatter.
+3. Copy each record template (`docs/template.architecture.md` and the rest) to `build.<record>.md`. For an existing codebase, also copy it to `audit.<record>.md`.
+4. Copy `docs/scopes/template.scope.md` to `docs/scopes/01-<name>.scope.md` and fill it in.
+5. Open your agent. It reads `AGENTS.md`, starts at READ and drafts a plan for that scope.
 
-CSFLite is a 25-control governance framework derived from NIST CSF v2.0. It measures **coverage** (does this capability exist?), not maturity or risk.
+## Add jig to a repo you already have
 
-Scoring: Yes (1.0) / Partial (0.5) / No (0.0) × weight per control.
+GitHub cannot merge a template into a repo that already exists. So you copy the files in by hand.
 
-See `csflite/controls.json` for the full control set and `csflite/scoring.md` for methodology.
+1. Clone jig next to your repo.
+2. Copy these into your repo: `AGENTS.md`, `CLAUDE.md`, `VOCABULARY.md`, `.claude/`, `harness/`, `docs/` and one folder from `rulesets/` (with `rulesets/README.md`).
+3. Do not copy jig's own `README.md`, `examples/` or `setup.sh`. If you want what `setup.sh` does, run its commands yourself.
+4. **Never overwrite a file that already exists.** This matters most for `AGENTS.md`, `CLAUDE.md`, `.gitignore` and `.claude/settings.json`. Open both versions and merge them. Keep your content.
+5. Follow the jig template when you merge. Use its headings and its order, so an agent reads your file the same way it reads jig's. Keep the deny rules in `.claude/settings.json`. They stop the agent from editing approved plans.
+6. Carry on from step 2 of "Start a project". Fill the audit records as well as the build records.
 
-## Project Structure After Setup
+## What is built so far
 
-As you work, the repo grows:
-
-```
-my-project/
-├── CLAUDE.md                  → system prompt (from template)
-├── .claude/                   → settings, agents, commands (local only after setup.sh)
-├── csflite/                   → framework data (from template)
-├── claude-project/            → spec development kit (from template)
-├── project.yaml               → your behavior spec
-├── decisions/                 → architecture decision records
-├── protocols/                 → domain-specific data contracts
-├── docs/                      → generated documents (gitignored)
-├── setup.sh
-├── .gitignore
-└── README.md
-```
-
-## What This Template Does NOT Include
-
-These are added per-project as needed, not baked into the template:
-
-- Compliance crosswalks (SOC 2, HIPAA, ISO 27001 mappings)
-- Application scaffolds (added via `/project:gen-app` when ready)
-- CI/CD pipelines
-- Docker/deployment configs
-- Infrastructure-as-Code
+| Part | Status |
+|---|---|
+| Process, terms, folder layout | In place |
+| Templates (spec, scope, plan, five records) and file naming | In place |
+| Slot (ties each rule to a check) | Not designed |
+| Loop scripts (`mark-done.sh`, `stop-check.sh`, `gate.sh`) | Not written |
+| Install script for an existing repo (today: copy by hand) | Not written |
+| Process rules (`harness/rules.md`) | Written, not yet tied to checks |
+| `neutral` ruleset | Proposed only |
+| `lean-security` ruleset | Drafted, not yet tied to checks |
 
 ## License
 
-Lean Security IP. Not for redistribution.
+UNSPECIFIED. Decided at release approval.

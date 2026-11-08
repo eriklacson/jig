@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "lean-security-template"
+name = "jig-python-example"
 version = "0.2.0"
-description = "Lean Security project template for Claude Code"
+description = "Python example for jig projects"
 authors = ["Erik Lacson <elacson@gmail.com>"]
 license = "Proprietary"
 readme = "README.md"
