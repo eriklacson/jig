@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Post-clone setup for Lean Security template projects.
+# Post-clone setup for jig projects.
 # Run once after cloning.
 #
 # Usage:
@@ -17,9 +17,6 @@ cat > .git/info/exclude << 'EOF'
 # Local-only ignores — not shared via .gitignore
 # See: https://git-scm.com/docs/gitignore
 
-# Claude Code directory — committed in template, local-only in projects
-.claude/
-
 # Personal Claude Code overrides
 CLAUDE.local.md
 
@@ -31,14 +28,5 @@ EOF
 
 echo "✓ .git/info/exclude created"
 
-# Install dependencies and pre-commit hooks
-if command -v poetry &> /dev/null; then
-  poetry install --with dev
-  poetry run pre-commit install
-  echo "✓ Dependencies installed"
-  echo "✓ Pre-commit hooks installed"
-else
-  echo "⚠ Poetry not found. Run 'poetry install --with dev && poetry run pre-commit install' manually."
-fi
 
-echo "✓ Template ready. Run /project:new-project in Claude Code to initialize."
+echo "✓ Template ready. Copy docs/template.spec.md to docs/<project>.spec.md to start."
