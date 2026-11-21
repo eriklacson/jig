@@ -86,11 +86,12 @@ Every file the process produces is named `<stub>.<type>.<extension>`, for exampl
 GitHub cannot merge a template into a repo that already exists. So you copy the files in by hand.
 
 1. Clone jig next to your repo.
-2. Copy these into your repo: `AGENTS.md`, `CLAUDE.md`, `VOCABULARY.md`, `.claude/`, `harness/`, `docs/` and one folder from `rulesets/` (with `rulesets/README.md`).
+2. Copy these into your repo: `AGENTS.md`, `CLAUDE.md`, `VOCABULARY.md`, `.claude/`, `harness/`, `docs/` and one folder from `rulesets/` (with `rulesets/README.md`). If you already keep your software rules in your own standards record, skip `rulesets/` and write that record's path in the spec's `ruleset:` field.
 3. Do not copy jig's own `README.md`, `examples/` or `setup.sh`. If you want what `setup.sh` does, run its commands yourself.
 4. **Never overwrite a file that already exists.** This matters most for `AGENTS.md`, `CLAUDE.md`, `.gitignore` and `.claude/settings.json`. Open both versions and merge them. Keep your content.
 5. Follow the jig template when you merge. Use its headings and its order, so an agent reads your file the same way it reads jig's. Keep the deny rules in `.claude/settings.json`. They stop the agent from editing approved plans.
-6. Carry on from step 2 of "Start a project". Fill the audit records as well as the build records.
+6. **Map your existing files.** Do not rename or move them. Add a table to your `AGENTS.md` that says which of your files plays each jig role: spec, build records, audit records, decision records, scopes. Add a line saying where your software rules live. Existing files keep their names, and the file-name rule applies only to new process files (P-10).
+7. Carry on from step 2 of "Start a project". Fill the audit records as well as the build records.
 
 ## What is built so far
 
